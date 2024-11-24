@@ -86,7 +86,7 @@ export async function POST(req: Request) {
 
     return new Response(JSON.stringify({ ogTags, tags }), { status: 200 });
   } catch (error) {
-    console.error("Error fetching meta tags:", error.message);
+    console.error("Error fetching meta tags:", (error as Error).message);
     return new Response(JSON.stringify({ error: "Failed to fetch metadata" }), {
       status: 500,
     });
