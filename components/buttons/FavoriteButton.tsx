@@ -1,0 +1,66 @@
+import React from "react";
+import { Button } from "../ui/button";
+import { Heart } from "lucide-react";
+import ButtonPopover from "./ButtonPopover";
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
+import { Resource } from "@/types";
+
+import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+
+const FavoriteButton = ({ resource }: { resource: Resource }) => {
+  const favorites = useFavoritesStore((state) => state.favorites);
+  const addFavorite = useFavoritesStore((state) => state.addFavorite);
+  const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
+
+  const isFavorite = favorites.includes(resource);
+
+  const handleFavorite = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.stopPropagation();
+
+    if (isFavorite) {
+      removeFavorite(resource);
+    } else {
+      addFavorite(resource);
+    }
+  };
+
+  return (
+    <ButtonPopover content={isFavorite ? "Favorited!" : "Favorite"}>
+      <Button
+        className="relative"
+        onClick={handleFavorite}
+        variant={isFavorite ? "default" : "outline"}
+        size="icon"
+      >
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform">
+          <AnimatePresence mode="wait" initial={false}>
+            {isFavorite ? (
+              <motion.div
+                key="favorite-heart"
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 250,
+                  damping: 10,
+                  duration: 0.15,
+                }}
+              >
+                <Heart className="stroke-white" />
+              </motion.div>
+            ) : (
+              <motion.div key="default-heart">
+                <Heart />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </Button>
+    </ButtonPopover>
+  );
+};
+
+export default FavoriteButton;

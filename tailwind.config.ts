@@ -1,14 +1,17 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import type { Config } from "tailwindcss";
-
 export default {
-    darkMode: ["class"],
-    content: [
+  darkMode: ["class"],
+  content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
   	extend: {
+  		backgroundImage: {
+  			'gradient-radial': 'radial-gradient(circle, var(--tw-gradient-from), var(--tw-gradient-to))'
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -55,8 +58,52 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		animation: {
+  			gradient: 'gradient 8s linear infinite',
+  			'line-shadow': 'line-shadow 15s linear infinite',
+  			grid: 'grid 15s linear infinite'
+  		},
+  		keyframes: {
+  			gradient: {
+  				to: {
+  					backgroundPosition: 'var(--bg-size) 0'
+  				}
+  			},
+  			'line-shadow': {
+  				'0%': {
+  					backgroundPosition: '0 0'
+  				},
+  				'100%': {
+  					backgroundPosition: '100% 0'
+  				}
+  			},
+  			grid: {
+  				'0%': {
+  					transform: 'translateY(-50%)'
+  				},
+  				'100%': {
+  					transform: 'translateY(0)'
+  				}
+  			}
+  		},
+  		fontFamily: {
+  			serif: ["var(--font-fraunces)", "serif"]
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("tailwind-scrollbar")({
+      nocompatible: true,
+      preferredStrategy: "pseudoelements",
+    }),
+    function ({
+      addVariant,
+    }: {
+      addVariant: (name: string, value: string) => void;
+    }) {
+      addVariant("light", "html:not(.dark) &");
+    },
+  ],
 } satisfies Config;
