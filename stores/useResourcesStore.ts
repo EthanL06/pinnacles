@@ -5,17 +5,57 @@ import { create } from "zustand";
 interface ResourceStore {
   resources: Resource[];
   fetchResources: () => Promise<void>;
+  isFetching: boolean;
+  refreshResources: () => Promise<void>;
   addResource: (resource: Resource) => Promise<void>;
   shuffleResources: () => void;
 }
 
+const REVALIDATE_TIME = 1000 * 60 * 60; // 1 hour revalidate time
+
 export const useResourcesStore = create<ResourceStore>()((set) => ({
   resources: [],
   fetchResources: async () => {
+    set({ isFetching: true });
+
+    const cachedData = localStorage.getItem("resources");
+    const cachedTime = localStorage.getItem("resourcesTimestamp");
+
+    if (
+      cachedData &&
+      cachedTime &&
+      Date.now() - parseInt(cachedTime) < REVALIDATE_TIME
+    ) {
+      console.log("Using cached data");
+
+      set({
+        resources: JSON.parse(cachedData),
+        isFetching: false,
+      });
+    } else {
+      console.log("Fetching new data");
+      const resources = await fetchResources();
+      localStorage.setItem("resources", JSON.stringify(resources));
+      localStorage.setItem("resourcesTimestamp", Date.now().toString());
+
+      set({
+        resources,
+        isFetching: false,
+      });
+    }
+  },
+  isFetching: false,
+  refreshResources: async () => {
+    set({ isFetching: true });
+
     const resources = await fetchResources();
-    // Sort by alphabetical order of title
-    resources.sort((a, b) => a.title.localeCompare(b.title));
-    set({ resources });
+    localStorage.setItem("resources", JSON.stringify(resources));
+    localStorage.setItem("resourcesTimestamp", Date.now().toString());
+
+    set({
+      resources,
+      isFetching: false,
+    });
   },
   addResource: async (resource) => {
     // Optimistically update the UI

@@ -1,6 +1,12 @@
 import { Resource } from "@/types";
 import { db } from "./firebase";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  orderBy,
+  query,
+} from "firebase/firestore";
 
 export const addResource = async (resource: Resource) => {
   try {
@@ -13,8 +19,9 @@ export const addResource = async (resource: Resource) => {
 
 export const fetchResources = async () => {
   try {
-    const querySnapshot = await getDocs(collection(db, "resources"));
-    // Return an array of OGTags
+    const q = query(collection(db, "resources"), orderBy("title"));
+    const querySnapshot = await getDocs(q);
+
     return querySnapshot.docs.map((doc) => doc.data() as Resource);
   } catch (e) {
     console.error("Error fetching documents: ", e);
