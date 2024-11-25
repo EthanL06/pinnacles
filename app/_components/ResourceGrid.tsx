@@ -12,11 +12,14 @@ import TagScroller from "./TagScroller";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
 import ViewMode from "@/components/dropdowns/ViewMode";
 import Filter from "@/components/dropdowns/Filter";
+import LoadingSpinner from "@/components/ui/loading-spinner";
+import RefreshButton from "@/components/buttons/RefreshButton";
 
 const ResourceGrid = () => {
   const viewMode = usePreferencesStore((state) => state.viewMode);
   const resources = useResourcesStore((state) => state.resources);
   const fetchResources = useResourcesStore((state) => state.fetchResources);
+  const isFetching = useResourcesStore((state) => state.isFetching);
   const query = useSearchStore((state) => state.query);
   const selectedTag = useSearchStore((state) => state.selectedTag);
   const favorites = useFavoritesStore((state) => state.favorites);
@@ -56,13 +59,14 @@ const ResourceGrid = () => {
 
   return (
     <div className="w-full bg-background">
-      <div className="mx-auto min-h-screen w-full max-w-[1920px] grow border-b border-border bg-background px-3 pb-10 sm:px-6 md:px-12">
+      <div className="mx-auto w-full max-w-[1920px] grow border-b border-border bg-background px-3 pb-10 sm:px-6 md:px-12">
         <TagScroller />
         <div className="mb-4 flex flex-wrap justify-between gap-x-3 gap-y-1.5">
           <div className="flex items-center gap-3">
             <ViewMode />
             <Filter />
             <ShuffleButton />
+            <RefreshButton />
           </div>
 
           <div className="flex grow items-center justify-between">
@@ -94,7 +98,7 @@ const ResourceGrid = () => {
         </div>
         <div
           className={cn(
-            "grid w-full bg-background",
+            "grid min-h-screen w-full bg-background",
             viewMode === "grid" &&
               "grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4",
             viewMode === "list" && "grid-cols-1",

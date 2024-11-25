@@ -150,7 +150,7 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
             className={cn(
               "text-xs text-gray-400",
               layout === "grid" &&
-                "mt-auto flex flex-wrap-reverse justify-between gap-y-4",
+                "mt-auto flex flex-row-reverse flex-wrap-reverse justify-between gap-y-4",
               layout === "list" && "mt-0 hidden md:flex",
             )}
           >
