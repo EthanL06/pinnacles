@@ -11,7 +11,6 @@ import ThemeButton from "./buttons/ThemeButton";
 import Logo from "./Logo";
 import CoffeeButton from "./buttons/CoffeeButton";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/router";
 
 const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);

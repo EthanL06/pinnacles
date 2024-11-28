@@ -34,7 +34,7 @@ const ReviewGrid = () => {
 
   useEffect(() => {
     fetchReviewingResources();
-  }, []);
+  }, [fetchReviewingResources]);
 
   if (!isSignedIn()) {
     return (

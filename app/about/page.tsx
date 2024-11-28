@@ -1,13 +1,11 @@
 import SubmitResource from "@/components/SubmitResource";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Github, Globe, Mail } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-type Props = {};
-
-const Page = (props: Props) => {
+const Page = () => {
   return (
     <div className="relative flex h-full min-h-screen w-full flex-col gap-8 gap-y-8 overflow-clip px-6 pb-16 pt-40 md:px-24 lg:px-48">
       <h1 className="font-serif text-6xl font-bold">

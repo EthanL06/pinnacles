@@ -1,6 +1,5 @@
 "use client";
 
-import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import React from "react";
 import Hero from "./_components/Hero";
