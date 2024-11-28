@@ -16,6 +16,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import { Badge } from "./ui/badge";
+import { iconMapping } from "./dropdowns/Filter";
+import { useSearchStore } from "@/stores/useSearchStore";
 
 type Props = {
   resource: Resource;
@@ -25,7 +28,11 @@ type Props = {
 const MAX_DESCRIPTION_LENGTH = 140; // Adjust this value as needed
 
 const ResourceItem = ({ resource, layout = "grid" }: Props) => {
+  const selectedTag = useSearchStore((state) => state.selectedTag);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const tags = resource.tags.sort((a, b) => a.text.localeCompare(b.text));
 
   const toggleDescription = () => {
     setShowFullDescription((prev) => !prev);
@@ -45,15 +52,15 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
         : resource.description.trimEnd();
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div
           className={cn(
-            "group flex scale-100 rounded-3xl p-6 transition-all duration-300 ease-in-out hover:cursor-pointer",
+            "group flex scale-100 rounded-3xl p-6 transition-all duration-300 ease-in-out last:mb-12 hover:cursor-pointer",
             layout === "grid" &&
-              "flex-col bg-gradient-to-br from-primary-foreground to-background outline outline-border hover:bg-primary-foreground hover:shadow-2xl hover:shadow-primary-foreground hover:outline-primary/30",
+              "h-full flex-col bg-gradient-to-br from-primary-foreground to-background outline outline-border hover:bg-primary-foreground hover:shadow-2xl hover:shadow-primary-foreground hover:outline-primary/30",
             layout === "list" &&
-              "light:resource-hover flex-row gap-6 p-4 pl-0 dark:hover:bg-primary-foreground",
+              "light:resource-hover flex-row gap-6 p-4 dark:hover:bg-primary-foreground",
           )}
         >
           {/* Image Section */}
@@ -62,11 +69,12 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
               "rounded-xl transition-all duration-100 ease-in-out",
               layout === "grid" && "mb-4 aspect-video max-h-[15rem] w-full",
               layout === "list" &&
-                "aspect-square h-32 flex-shrink-0 sm:aspect-video",
+                "aspect-square max-h-24 w-24 flex-shrink-0 sm:aspect-video sm:max-h-32 sm:w-32",
             )}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
+              loading="lazy"
               src={resource.image || "/images/placeholder.png"}
               alt={resource.title}
               className={cn(
@@ -113,12 +121,10 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
 
             {layout === "list" && (
               <div className="flex flex-col gap-y-3">
-                <div className="flex gap-1.5">
+                <div className="flex flex-wrap gap-1.5">
                   {/* Tags */}
-                  {resource.tags &&
-                    resource.tags.map((tag) => (
-                      <Tag key={tag.id}>{tag.text}</Tag>
-                    ))}
+                  {tags &&
+                    tags.map((tag) => <Tag key={tag.id}>{tag.text}</Tag>)}
                 </div>
 
                 <div className="flex items-center justify-end gap-1 md:hidden">
@@ -150,7 +156,7 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
             className={cn(
               "text-xs text-gray-400",
               layout === "grid" &&
-                "mt-auto flex flex-row-reverse flex-wrap-reverse justify-between gap-y-4",
+                "mt-auto flex flex-row-reverse justify-between gap-4",
               layout === "list" && "mt-0 hidden md:flex",
             )}
           >
@@ -175,12 +181,9 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
               <FavoriteButton resource={resource} />
             </div>
             {layout === "grid" && (
-              <div className="flex items-end gap-1.5">
+              <div className="flex flex-wrap items-end gap-1.5">
                 {/* Tags */}
-                {resource.tags &&
-                  resource.tags.map((tag) => (
-                    <Tag key={tag.id}>{tag.text}</Tag>
-                  ))}
+                {tags && tags.map((tag) => <Tag key={tag.id}>{tag.text}</Tag>)}
               </div>
             )}
           </div>
@@ -188,10 +191,19 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
       </DialogTrigger>
 
       <DialogContent>
-        <DialogTitle className="text-3xl">{resource.title}</DialogTitle>
+        <DialogTitle className="flex items-center gap-x-2 text-3xl">
+          {resource.title}
+
+          <Badge
+            title={resource.type}
+            variant="secondary"
+            className="p-2 text-xs capitalize"
+          >
+            {iconMapping[resource.type]}
+          </Badge>
+        </DialogTitle>
         <div className="flex gap-1.5">
-          {resource.tags &&
-            resource.tags.map((tag) => <Tag key={tag.id}>{tag.text}</Tag>)}
+          {tags && tags.map((tag) => <Tag key={tag.id}>{tag.text}</Tag>)}
         </div>
 
         <div className="aspect-video max-h-[24rem] w-full">
@@ -207,7 +219,14 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
 
         <div className="flex justify-between">
           <div className="flex gap-1.5">
-            <FavoriteButton resource={resource} />
+            <FavoriteButton
+              resource={resource}
+              callback={() => {
+                if (selectedTag === "Favorites") {
+                  setOpen(false);
+                }
+              }}
+            />
             <CopyButton link={resource.url} />
           </div>
           <div className="flex items-center justify-end gap-1.5">

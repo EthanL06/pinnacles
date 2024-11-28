@@ -9,7 +9,6 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { fetchOgTags } from "@/lib/api";
-import { useResourcesStore } from "@/stores/useResourcesStore";
 import { ImageIcon, LinkIcon, SendIcon, XIcon } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -35,6 +34,7 @@ import Tag from "./Tag";
 import { useToast } from "@/hooks/use-toast";
 import { ResourceTypes } from "@/types/Resource";
 import { createFireworks } from "./ui/confetti";
+import { addResourceToReview } from "@/firebase/database";
 
 const formSchema = z.object({
   url: z.string().url(),
@@ -53,10 +53,12 @@ const formSchema = z.object({
 });
 
 const SubmitResourceForm = ({
+  setHasChanged,
   preview,
   setPreview,
   setOpen,
 }: {
+  setHasChanged: (hasChanged: boolean) => void;
   preview: boolean;
   setPreview: (preview: boolean) => void;
   setOpen: (open: boolean) => void;
@@ -73,7 +75,6 @@ const SubmitResourceForm = ({
     },
   });
 
-  const addResource = useResourcesStore((state) => state.addResource);
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
   const [tags, setTags] = useState<TagType[]>([]);
   const [hasFetched, setHasFetched] = useState(false);
@@ -82,7 +83,7 @@ const SubmitResourceForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-    await addResource({
+    await addResourceToReview({
       title: values.title,
       description: values.description,
       image: values.imageUrl,
@@ -98,13 +99,15 @@ const SubmitResourceForm = ({
 
     toast({
       title: "Resource submitted!",
-      description: "Your resource has been successfully submitted.",
+      description:
+        "Your resource has been successfully submitted for review. Thank you!",
       duration: 2500,
     });
   };
 
   const onFetchClick = async () => {
     setIsLoading(true);
+    setHasChanged(true);
     try {
       const data = await fetchOgTags(form.getValues("url"));
 
@@ -130,7 +133,7 @@ const SubmitResourceForm = ({
   };
 
   return (
-    <div>
+    <div className="h-fit">
       {!preview && (
         <Form {...form}>
           <form
@@ -146,7 +149,7 @@ const SubmitResourceForm = ({
                   control={form.control}
                   name="url"
                   render={({ field }) => (
-                    <FormItem className="grow">
+                    <FormItem className="grow text-left">
                       <FormLabel>Resource Link</FormLabel>
                       <FormControl>
                         <div className="flex items-center gap-2">
@@ -166,7 +169,7 @@ const SubmitResourceForm = ({
                         </div>
                       </FormControl>
                       {!hasFetched && (
-                        <FormDescription className="text-xs">
+                        <FormDescription className="text-left text-xs">
                           We&apos;ll automatically fetch the title, description,
                           and preview image for you.
                         </FormDescription>

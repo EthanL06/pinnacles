@@ -12,7 +12,7 @@ interface PreferencesState {
 export const usePreferencesStore = create<PreferencesState>()(
   persist(
     (set) => ({
-      viewMode: "grid", // Defa ult view mode
+      viewMode: "grid",
       setViewMode: (viewMode) => set({ viewMode }),
       filter: "all",
       setFilter: (filter) => set({ filter }),

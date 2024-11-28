@@ -21,7 +21,7 @@ import {
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
 import { ResourceType, ResourceTypes } from "@/types/Resource";
 
-const iconMapping = {
+export const iconMapping = {
   all: <></>,
   website: <Globe size={16} />,
   article: <Newspaper size={16} />,

@@ -12,7 +12,6 @@ const Page = () => {
       <Hero />
       <ResourceGrid />
       <ScrollToTop />
-      <Footer />
     </div>
   );
 };

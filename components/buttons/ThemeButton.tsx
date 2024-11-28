@@ -8,7 +8,7 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ThemeButton = () => {
-  const { setTheme, theme } = useTheme();
+  const { setTheme, resolvedTheme: theme } = useTheme();
 
   const isDarkMode = theme === "dark";
   const popoverContent = isDarkMode ? "Light Mode" : "Dark Mode";

@@ -1,3 +1,5 @@
+"use client";
+
 import ShuffleButton from "@/components/buttons/ShuffleButton";
 import ResourceItem from "@/components/ResourceItem";
 import SubmitResource from "@/components/SubmitResource";
@@ -14,6 +16,7 @@ import ViewMode from "@/components/dropdowns/ViewMode";
 import Filter from "@/components/dropdowns/Filter";
 import LoadingSpinner from "@/components/ui/loading-spinner";
 import RefreshButton from "@/components/buttons/RefreshButton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ResourceGrid = () => {
   const viewMode = usePreferencesStore((state) => state.viewMode);
@@ -30,10 +33,6 @@ const ResourceGrid = () => {
   }, [fetchResources]);
 
   const filterResources = () => {
-    if (selectedTag === "Favorites") {
-      return favorites;
-    }
-
     return resources.filter((resource) => {
       const matchesQuery = query
         ? resource.title.toLowerCase().includes(query.toLowerCase()) ||
@@ -45,6 +44,8 @@ const ResourceGrid = () => {
 
       const matchesTag =
         selectedTag === "All" ||
+        (selectedTag === "Favorites" &&
+          favorites.some((favorite) => favorite.title === resource.title)) ||
         resource.tags.some((tag) => tag.text === selectedTag);
 
       const matchesFilter =
@@ -59,7 +60,7 @@ const ResourceGrid = () => {
 
   return (
     <div className="w-full bg-background">
-      <div className="mx-auto w-full max-w-[1920px] grow border-b border-border bg-background px-3 pb-10 sm:px-6 md:px-12">
+      <div className="mx-auto w-full max-w-[1920px] grow border-b border-border bg-background px-4 pb-10 sm:px-6 md:px-12">
         <TagScroller />
         <div className="mb-4 flex flex-wrap justify-between gap-x-3 gap-y-1.5">
           <div className="flex items-center gap-3">
@@ -69,28 +70,34 @@ const ResourceGrid = () => {
             <RefreshButton />
           </div>
 
-          <div className="flex grow items-center justify-between">
-            <p>
-              {filteredResources.length < resources.length ? (
-                <>
-                  Showing{" "}
-                  <span className="font-semibold">
-                    {filteredResources.length}
-                  </span>{" "}
-                  of {resources.length} resources...
-                </>
-              ) : (
-                <>
-                  Showing{" "}
-                  <span className="font-semibold">
-                    {filteredResources.length}
-                  </span>{" "}
-                  resources...
-                </>
-              )}
-            </p>
+          <div className="flex w-full grow items-center justify-between text-sm sm:w-fit sm:text-base">
+            {isFetching ? (
+              <div className="text-center">
+                <LoadingSpinner className="stroke-primary" />
+              </div>
+            ) : filteredResources.length < resources.length ? (
+              <p>
+                Showing{" "}
+                <span className="font-semibold">
+                  {filteredResources.length}
+                </span>{" "}
+                of {resources.length} resources...
+              </p>
+            ) : (
+              <p>
+                Showing{" "}
+                <span className="font-semibold">
+                  {filteredResources.length}
+                </span>{" "}
+                resources...
+              </p>
+            )}
+
             <SubmitResource hasPopover={false}>
-              <Button className="text-inherit underline" variant={"link"}>
+              <Button
+                className="px-0 text-xs text-inherit underline sm:text-sm"
+                variant={"link"}
+              >
                 Suggest a resource?
               </Button>
             </SubmitResource>
@@ -98,20 +105,41 @@ const ResourceGrid = () => {
         </div>
         <div
           className={cn(
-            "grid min-h-screen w-full bg-background",
+            "grid w-full bg-background",
             viewMode === "grid" &&
               "grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4",
             viewMode === "list" && "grid-cols-1",
+            (isFetching || filteredResources.length == 0) && "min-h-[75vh]",
           )}
         >
-          {filteredResources.map((resource, index) => (
-            <React.Fragment key={index}>
-              <ResourceItem resource={resource} layout={viewMode} />
-              {viewMode === "list" && index !== resources.length - 1 && (
-                <Separator className="my-1.5" />
-              )}
-            </React.Fragment>
-          ))}
+          {isFetching ? (
+            Array.from({ length: 12 }).map((_, index) => (
+              <Skeleton
+                className={cn(
+                  "size-full rounded-3xl",
+                  viewMode === "grid" && "h-[22.5rem]",
+                  viewMode === "list" && "mb-4 h-32",
+                )}
+                key={index}
+              />
+            ))
+          ) : filteredResources.length === 0 ? (
+            <div className="col-span-full mt-12 flex h-full w-full flex-col items-center gap-y-1.5">
+              <span className="text-pretty font-medium">
+                Oops! Looks like there’s nothing here.
+              </span>
+            </div>
+          ) : (
+            filteredResources.map((resource, index) => (
+              <React.Fragment key={index}>
+                <ResourceItem resource={resource} layout={viewMode} />
+                {viewMode === "list" &&
+                  index !== filteredResources.length - 1 && (
+                    <Separator className="my-1.5" />
+                  )}
+              </React.Fragment>
+            ))
+          )}
         </div>
       </div>
     </div>

@@ -22,6 +22,7 @@ const SubmitResource = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [preview, setPreview] = useState(false);
+  const [hasChanged, setHasChanged] = useState(false);
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -54,8 +55,14 @@ const SubmitResource = ({
           e.preventDefault();
           e.stopPropagation();
 
+          if (!hasChanged) {
+            setIsOpen(false);
+            setPreview(false);
+            return;
+          }
+
           const result = window.confirm(
-            "You have unsaved changes. Are you sure you want to close this dialog? All changes will be lost.",
+            "Are you sure you want to close this dialog? All changes will be lost.",
           );
 
           if (result) {
@@ -75,6 +82,7 @@ const SubmitResource = ({
           </DialogDescription>
         </DialogHeader>
         <SubmitResourceForm
+          setHasChanged={setHasChanged}
           preview={preview}
           setPreview={setPreview}
           setOpen={setIsOpen}

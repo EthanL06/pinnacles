@@ -1,25 +1,36 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import useDebounce from "@/hooks/use-debounce";
 import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/stores/useSearchStore";
 import { SearchIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const Search = () => {
   const setQuery = useSearchStore((state) => state.setQuery);
+  const pathName = usePathname();
+
+  const handleQueryChange = useDebounce((query: string) => {
+    setQuery(query);
+  }, 300);
+
+  if (pathName !== "/" && pathName !== "/admin") {
+    return null;
+  }
 
   return (
     <div
       className={cn(
-        "w-full max-w-xs transform items-center justify-center rounded-3xl shadow-none transition-all duration-500 hover:shadow-lg",
+        "w-full transform items-center justify-center rounded-3xl shadow-none transition-all duration-500 hover:shadow-lg",
       )}
     >
       <Input
         startIcon={SearchIcon}
-        placeholder="Search for 'SVG Icons' or 'React'"
+        placeholder="Search for 'Inspiration' or 'Fonts'"
         className="w-full rounded-3xl bg-background px-10 py-6"
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={(e) => handleQueryChange(e.target.value)}
       />
     </div>
   );

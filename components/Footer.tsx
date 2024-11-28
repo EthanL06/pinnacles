@@ -8,25 +8,15 @@ import { cn } from "@/lib/utils";
 
 const Footer = () => {
   return (
-    <footer className="relative flex h-[6rem] w-full justify-between overflow-clip bg-gradient-to-t from-transparent from-15% to-blue-300/10 p-8 pt-6">
-      <Link className="flex items-center gap-x-[.625rem]" href={"/"}>
-        <Logo className="size-6" />
+    <footer className="relative flex w-full flex-col justify-between gap-y-4 overflow-clip bg-gradient-to-t from-transparent from-15% to-blue-300/20 px-4 py-6 sm:h-[6rem] sm:flex-row sm:px-8">
+      <div className="flex flex-col gap-y-2">
+        <Link className="flex items-center gap-x-[.625rem]" href={"/"}>
+          <Logo className="size-6" />
 
-        <div className="font-serif text-2xl font-bold">pinnacles.</div>
-      </Link>
-
-      <div className="flex items-center dark:text-gray-300">
-        <Link
-          className="hover:underline"
-          target="_blank"
-          href="https://www.buymeacoffee.com/ethanlanting"
-        >
-          buy me a coffee! ☕️
+          <div className="font-serif text-2xl font-bold">pinnacles.</div>
         </Link>
 
-        <span className="mx-2">•</span>
-
-        <p>
+        <p className="whitespace-nowrap text-xs text-muted-foreground">
           Created by{" "}
           <Link
             className="font-semibold hover:underline dark:text-white"
@@ -37,6 +27,34 @@ const Footer = () => {
           </Link>{" "}
           &copy; {new Date().getFullYear()}
         </p>
+      </div>
+      <div className="flex flex-wrap-reverse items-center gap-y-1 whitespace-nowrap text-sm">
+        <Link
+          className="hover:underline dark:text-muted-foreground dark:hover:text-white sm:text-base"
+          target="_blank"
+          href="https://www.buymeacoffee.com/ethanlanting"
+        >
+          support me!
+        </Link>
+
+        <span className="mx-2">•</span>
+
+        <Link
+          className="hover:underline dark:text-muted-foreground dark:hover:text-white sm:text-base"
+          target="_blank"
+          href="https://github.com/EthanL06/pinnacles"
+        >
+          source code
+        </Link>
+
+        <span className="mx-2">•</span>
+
+        <Link
+          className="hover:underline dark:text-muted-foreground dark:hover:text-white sm:text-base"
+          href="/privacy-policy"
+        >
+          privacy policy
+        </Link>
       </div>
 
       <Particles

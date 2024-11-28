@@ -20,9 +20,24 @@ export async function POST(req: Request) {
     // Fetch the HTML content of the provided URL using fetch
     const response = await fetch(url);
     if (!response.ok) {
+      // return new Response(
+      //   JSON.stringify({ error: "Failed to fetch the page" }),
+      //   { status: 500 },
+      // );
       return new Response(
-        JSON.stringify({ error: "Failed to fetch the page" }),
-        { status: 500 },
+        JSON.stringify({
+          ogTags: {
+            title: "",
+            url: "",
+            description: "",
+            image: "",
+            type: "website",
+          },
+          tags: [],
+        }),
+        {
+          status: 200,
+        },
       );
     }
 

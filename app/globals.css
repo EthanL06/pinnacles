@@ -30,13 +30,7 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
 
-    --fs-sm: clamp(0.8rem, -0.02vi + 0.8rem, 0.79rem);
-    --fs-base: clamp(1rem, 0.34vi + 0.91rem, 1.19rem);
-    --fs-md: clamp(1.25rem, 0.97vi + 1.01rem, 1.78rem);
-    --fs-lg: clamp(1.56rem, 2.02vi + 1.06rem, 2.67rem);
-    --fs-xl: clamp(1.95rem, 3.74vi + 1.02rem, 4.01rem);
-    --fs-xxl: clamp(2.44rem, 6.49vi + 0.82rem, 6.01rem);
-    --fs-xxxl: clamp(3.05rem, 10.85vi + 0.34rem, 9.02rem);
+    --fs-xxxl: clamp(3.05rem, 10.85vi + 0.34rem, 4.02rem);
   }
   .dark {
     --background: 222.2 84% 4.9%;
@@ -104,7 +98,7 @@
 }
 
 .heading {
-  font-size: var(--fs-xl);
+  font-size: var(--fs-xxxl);
   line-height: 1.25;
   font-weight: 900;
 }

@@ -5,6 +5,7 @@ import { Fraunces, Poppins } from "next/font/google";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
+import Footer from "@/components/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,7 +24,8 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: "pinnacles — peak resources for web developers and designers.",
-  description: "peak resources for web developers and designers",
+  description:
+    "a curated list of resources that are useful, high-quality, and up-to-date.",
 };
 
 export default function RootLayout({
@@ -36,7 +38,7 @@ export default function RootLayout({
       <Analytics />
       <html lang="en">
         <body
-          className={`${poppins.className} ${fraunces.variable} min-h-screen antialiased`}
+          className={`${poppins.className} ${fraunces.variable} relative min-h-screen antialiased`}
         >
           <ThemeProvider
             attribute={"class"}
@@ -46,6 +48,7 @@ export default function RootLayout({
           >
             <Navbar />
             <main>{children}</main>
+            <Footer />
             <Toaster />
           </ThemeProvider>
         </body>
