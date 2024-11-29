@@ -12,6 +12,8 @@ import {
 } from "firebase/firestore";
 import { ReviewingResource } from "@/types/Resource";
 
+const REVALIDATE_TIME = 1000 * 60 * 60;
+
 export const addResourceToReview = async (resource: Resource) => {
   try {
     const { id } = await addDoc(collection(db, "review"), resource);

@@ -26,6 +26,7 @@ const ThemeButton = () => {
   return (
     <ButtonPopover content={popoverContent}>
       <Button
+        aria-label={popoverContent}
         className="relative overflow-hidden"
         onClick={handleClick}
         size={"icon"}

@@ -1,36 +1,38 @@
 "use client";
 
-import ShuffleButton from "@/components/buttons/ShuffleButton";
 import ResourceItem from "@/components/ResourceItem";
-import SubmitResource from "@/components/SubmitResource";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useResourcesStore } from "@/stores/useResourcesStore";
 import { useSearchStore } from "@/stores/useSearchStore";
 import React, { useEffect } from "react";
-import TagScroller from "./TagScroller";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
-import ViewMode from "@/components/dropdowns/ViewMode";
-import Filter from "@/components/dropdowns/Filter";
-import LoadingSpinner from "@/components/ui/loading-spinner";
-import RefreshButton from "@/components/buttons/RefreshButton";
 import { Skeleton } from "@/components/ui/skeleton";
+import ResourceBar from "./ResourceBar";
+import { Resource } from "@/types";
 
-const ResourceGrid = () => {
+interface Props {
+  fetchedResources: Resource[];
+}
+
+const ResourceGrid = ({ fetchedResources }: Props) => {
+  const favorites = useFavoritesStore((state) => state.favorites);
+
+  const filter = usePreferencesStore((state) => state.filter);
   const viewMode = usePreferencesStore((state) => state.viewMode);
-  const resources = useResourcesStore((state) => state.resources);
-  const fetchResources = useResourcesStore((state) => state.fetchResources);
+
   const isFetching = useResourcesStore((state) => state.isFetching);
+  const setResources = useResourcesStore((state) => state.setResources);
+  const resources = useResourcesStore((state) => state.resources);
+
   const query = useSearchStore((state) => state.query);
   const selectedTag = useSearchStore((state) => state.selectedTag);
-  const favorites = useFavoritesStore((state) => state.favorites);
-  const filter = usePreferencesStore((state) => state.filter);
 
   useEffect(() => {
-    fetchResources();
-  }, [fetchResources]);
+    console.log("fetchedResources", fetchedResources);
+    setResources(fetchedResources);
+  }, [fetchedResources, setResources]);
 
   const filterResources = () => {
     return resources.filter((resource) => {
@@ -61,48 +63,12 @@ const ResourceGrid = () => {
   return (
     <div className="w-full bg-background">
       <div className="mx-auto w-full max-w-[1920px] grow border-b border-border bg-background px-4 pb-10 sm:px-6 md:px-12">
-        <TagScroller />
-        <div className="mb-4 flex flex-wrap justify-between gap-x-3 gap-y-1.5">
-          <div className="flex items-center gap-3">
-            <ViewMode />
-            <Filter />
-            <ShuffleButton />
-            <RefreshButton />
-          </div>
+        <ResourceBar
+          filteredResources={filteredResources}
+          resources={resources}
+          isFetching={isFetching}
+        />
 
-          <div className="flex w-full grow items-center justify-between text-sm sm:w-fit sm:text-base">
-            {isFetching ? (
-              <div className="text-center">
-                <LoadingSpinner className="stroke-primary" />
-              </div>
-            ) : filteredResources.length < resources.length ? (
-              <p>
-                Showing{" "}
-                <span className="font-semibold">
-                  {filteredResources.length}
-                </span>{" "}
-                of {resources.length} resources...
-              </p>
-            ) : (
-              <p>
-                Showing{" "}
-                <span className="font-semibold">
-                  {filteredResources.length}
-                </span>{" "}
-                resources...
-              </p>
-            )}
-
-            <SubmitResource hasPopover={false}>
-              <Button
-                className="px-0 text-xs text-inherit underline sm:text-sm"
-                variant={"link"}
-              >
-                Suggest a resource?
-              </Button>
-            </SubmitResource>
-          </div>
-        </div>
         <div
           className={cn(
             "grid w-full bg-background",

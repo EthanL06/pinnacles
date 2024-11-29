@@ -41,6 +41,7 @@ const FavoriteButton = ({
   return (
     <ButtonPopover content={isFavorite ? "Favorited!" : "Favorite"}>
       <Button
+        aria-label={isFavorite ? "Unfavorite" : "Favorite"}
         className="relative"
         onClick={handleFavorite}
         variant={isFavorite ? "default" : "outline"}

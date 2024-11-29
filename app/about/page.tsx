@@ -2,8 +2,30 @@ import SubmitResource from "@/components/SubmitResource";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Github, Globe, Mail } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "About — pinnacles.",
+  description: "Learn more about pinnacles.",
+  openGraph: {
+    type: "website",
+    description: "Learn more about pinnacles.",
+    url: "https://pinnacles.app/about",
+    siteName: "pinnacles.",
+    title: "About — pinnacles.",
+    locale: "en_US",
+    images: [
+      {
+        url: "https://pinnacles.app/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "pinnacles.",
+      },
+    ],
+  },
+};
 
 const Page = () => {
   return (

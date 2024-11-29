@@ -20,6 +20,7 @@ const RefreshButton = () => {
   return (
     <ButtonPopover content={isRefreshing ? "Refreshed!" : "Refresh"}>
       <Button
+        aria-label="Refresh"
         disabled={isRefreshing}
         className="relative disabled:opacity-100"
         onClick={handleRefresh}

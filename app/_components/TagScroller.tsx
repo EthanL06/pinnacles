@@ -3,6 +3,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useResourcesStore } from "@/stores/useResourcesStore";
 import { useSearchStore } from "@/stores/useSearchStore";
 import type { Tag as TagType } from "emblor";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export default function TagScroller() {
   const resources = useResourcesStore((state) => state.resources);
@@ -11,6 +13,28 @@ export default function TagScroller() {
   const onSelectedTagChange = useSearchStore(
     (state) => state.onSelectedTagChange,
   );
+
+  const searchParams = useSearchParams();
+  const pathName = usePathname();
+
+  useEffect(() => {
+    onSelectedTagChange(searchParams.get("tag") || "All");
+  }, [searchParams, onSelectedTagChange]);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    searchParams.forEach((value, key) => {
+      if (key !== "tag") {
+        params.append(key, value);
+      }
+    });
+
+    if (selectedTag !== "All") {
+      params.set("tag", selectedTag);
+    }
+
+    window.history.pushState(null, "", `${pathName}?${params.toString()}`);
+  }, [selectedTag, pathName]);
 
   const tags = resources
     .reduce((acc: TagType[], resource) => {

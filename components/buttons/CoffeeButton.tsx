@@ -7,6 +7,7 @@ const CoffeeButton = () => {
   return (
     <ButtonPopover content={"support me! 🫠"}>
       <Link
+        aria-label="Support Me"
         target="_blank"
         href="https://www.buymeacoffee.com/ethanlanting"
         className={buttonVariants({ variant: "outline", size: "icon" })}

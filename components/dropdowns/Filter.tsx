@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
 import { ResourceType, ResourceTypes } from "@/types/Resource";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export const iconMapping = {
   all: <></>,
@@ -34,10 +35,32 @@ const Filter = () => {
   const filter = usePreferencesStore((state) => state.filter);
   const setFilter = usePreferencesStore((state) => state.setFilter);
 
+  const searchParams = useSearchParams();
+  const pathName = usePathname();
+
+  useEffect(() => {
+    setFilter((searchParams.get("filter") as ResourceType | "all") || "all");
+  }, [searchParams, setFilter]);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    searchParams.forEach((value, key) => {
+      if (key !== "filter") {
+        params.append(key, value);
+      }
+    });
+
+    if (filter !== "all") {
+      params.set("filter", filter);
+    }
+
+    window.history.pushState(null, "", `${pathName}?${params.toString()}`);
+  }, [filter, pathName]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="pl-3 pr-2" variant="outline">
+        <Button aria-label="Filter" className="pl-3 pr-2" variant="outline">
           {filter === "all" ? <FilterIcon size={16} /> : iconMapping[filter]}
           <ChevronDown />
         </Button>

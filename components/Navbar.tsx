@@ -27,6 +27,7 @@ const Navbar = () => {
           <Link
             className="inline-block transition-transform duration-300 ease-in-out hover:-translate-y-0.5"
             href={"/"}
+            aria-label="Home"
           >
             <Logo className="size-8" />
           </Link>
@@ -39,6 +40,7 @@ const Navbar = () => {
         <div className="hidden grow basis-0 justify-end gap-2 sm:flex">
           <ButtonPopover content={"About"}>
             <Link
+              aria-label="About"
               className={buttonVariants({
                 variant: "outline",
                 size: "icon",
@@ -49,7 +51,11 @@ const Navbar = () => {
             </Link>
           </ButtonPopover>
           <SubmitResource>
-            <Button size={"icon"} variant={"outline"}>
+            <Button
+              aria-label="Submit Resource"
+              size={"icon"}
+              variant={"outline"}
+            >
               <FilePlus />
             </Button>
           </SubmitResource>
@@ -129,6 +135,7 @@ const Navbar = () => {
         </AnimatePresence>
 
         <Button
+          aria-label="Toggle Menu"
           onClick={() => setShowMobileMenu(!showMobileMenu)}
           size={"icon"}
           variant={"outline"}

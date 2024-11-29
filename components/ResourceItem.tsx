@@ -55,6 +55,7 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div
+          role="button"
           className={cn(
             "group flex scale-100 rounded-3xl p-6 transition-all duration-300 ease-in-out last:mb-12 hover:cursor-pointer",
             layout === "grid" &&
@@ -75,6 +76,7 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               loading="lazy"
+              rel="preload"
               src={resource.image || "/images/placeholder.png"}
               alt={resource.title}
               className={cn(
@@ -130,6 +132,7 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
                 <div className="flex items-center justify-end gap-1 md:hidden">
                   <ButtonPopover content="Open Link">
                     <Link
+                      aria-label="Open Link"
                       target="_blank"
                       rel="noopener noreferrer"
                       href={resource.url}
@@ -163,6 +166,7 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
             <div className="flex items-center gap-1">
               <ButtonPopover content="Open Link">
                 <Link
+                  aria-label="Open Link"
                   target="_blank"
                   rel="noopener noreferrer"
                   href={resource.url}
@@ -234,6 +238,7 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
               <Button variant={"outline"}>Close</Button>
             </DialogClose>
             <Link
+              aria-label="Open Link"
               target="_blank"
               rel="noopener noreferrer"
               href={resource.url}

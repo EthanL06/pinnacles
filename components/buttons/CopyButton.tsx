@@ -23,6 +23,7 @@ const CopyButton = ({ link }: { link: string }) => {
       <PopoverTrigger asChild>
         <ButtonPopover content={copied ? "Copied!" : "Copy"}>
           <Button
+            aria-label="Copy link"
             variant="outline"
             size="icon"
             onClick={handleCopy}
