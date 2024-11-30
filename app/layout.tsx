@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://pinnacles.app"),
   title: "pinnacles. | Peak resources for web developers and designers",
   description:
-    "A curated list of resources that are useful, high-quality, and up-to-date for web developers, UI/UX designers, and creative professionals.",
+    "A curated list of useful, high-quality, and up-to-date resources for web developers, UI/UX designers, and creative professionals.",
   keywords: [
     "web dev",
     "web development",
@@ -86,10 +86,10 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     description:
-      "A curated list of resources that are useful, high-quality, and up-to-date for web developers, UI/UX designers, and creative professionals.",
+      "A curated list of useful, high-quality, and up-to-date resources for web developers, UI/UX designers, and creative professionals.",
     url: "https://pinnacles.app",
     siteName: "pinnacles.",
-    title: "pinnacles | Peak resources for web developers and designers",
+    title: "pinnacles. | Peak resources for web developers and designers",
     locale: "en_US",
     images: [
       {
@@ -104,9 +104,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@pinnacles_app",
     creator: "@pinnacles_app",
-    title: "pinnacles | peak resources for web developers and designers",
+    title: "pinnacles. | peak resources for web developers and designers",
     description:
-      "A curated list of resources that are useful, high-quality, and up-to-date for web developers, UI/UX designers, and creative professionals.",
+      "A curated list of useful, high-quality, and up-to-date resources for web developers, UI/UX designers, and creative professionals.",
     images: [
       {
         url: "https://pinnacles.app/opengraph-image.png",
