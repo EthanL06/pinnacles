@@ -3,9 +3,15 @@ import React from "react";
 import Hero from "./_components/Hero";
 import ResourceGrid from "./_components/ResourceGrid";
 import { fetchResources } from "@/firebase/database";
+import { unstable_cache } from "next/cache";
+
+const getCachedResources = unstable_cache(fetchResources, ["resources"], {
+  revalidate: 1000 * 60 * 60,
+  tags: ["resources"],
+});
 
 const Page = async () => {
-  const resources = await fetchResources();
+  const resources = await getCachedResources();
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">

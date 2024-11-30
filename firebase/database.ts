@@ -12,8 +12,6 @@ import {
 } from "firebase/firestore";
 import { ReviewingResource } from "@/types/Resource";
 
-const REVALIDATE_TIME = 1000 * 60 * 60;
-
 export const addResourceToReview = async (resource: Resource) => {
   try {
     const { id } = await addDoc(collection(db, "review"), resource);
@@ -68,9 +66,11 @@ export const addResource = async (resource: Resource) => {
 
 export const fetchResources = async () => {
   try {
+    console.log("Fetching resources");
     const q = query(collection(db, "resources"), orderBy("title"));
     const querySnapshot = await getDocs(q);
 
+    console.log("I AM FETCHING WTFFF");
     return querySnapshot.docs.map((doc) => doc.data() as Resource);
   } catch (e) {
     console.error("Error fetching documents: ", e);

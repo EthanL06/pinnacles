@@ -1,40 +1,15 @@
 import Tag from "@/components/Tag";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useResourcesStore } from "@/stores/useResourcesStore";
-import { useSearchStore } from "@/stores/useSearchStore";
 import type { Tag as TagType } from "emblor";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useQueryState } from "nuqs";
 
 export default function TagScroller() {
   const resources = useResourcesStore((state) => state.resources);
   const isFetching = useResourcesStore((state) => state.isFetching);
-  const selectedTag = useSearchStore((state) => state.selectedTag);
-  const onSelectedTagChange = useSearchStore(
-    (state) => state.onSelectedTagChange,
-  );
-
-  const searchParams = useSearchParams();
-  const pathName = usePathname();
-
-  useEffect(() => {
-    onSelectedTagChange(searchParams.get("tag") || "All");
-  }, [searchParams, onSelectedTagChange]);
-
-  useEffect(() => {
-    const params = new URLSearchParams();
-    searchParams.forEach((value, key) => {
-      if (key !== "tag") {
-        params.append(key, value);
-      }
-    });
-
-    if (selectedTag !== "All") {
-      params.set("tag", selectedTag);
-    }
-
-    window.history.pushState(null, "", `${pathName}?${params.toString()}`);
-  }, [selectedTag, pathName]);
+  const [selectedTag, setSelectedTag] = useQueryState("tag", {
+    history: "push",
+  });
 
   const tags = resources
     .reduce((acc: TagType[], resource) => {
@@ -85,7 +60,11 @@ export default function TagScroller() {
               className="cursor-pointer"
               variant={selectedTag === tag.text ? "default" : "outline"}
               onClick={() => {
-                onSelectedTagChange(tag.text);
+                if (selectedTag === tag.text) {
+                  setSelectedTag("All");
+                } else {
+                  setSelectedTag(tag.text);
+                }
               }}
               key={tag.id}
             >

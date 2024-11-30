@@ -5,34 +5,50 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useResourcesStore } from "@/stores/useResourcesStore";
-import { useSearchStore } from "@/stores/useSearchStore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import ResourceBar from "./ResourceBar";
 import { Resource } from "@/types";
+import { useQueryState } from "nuqs";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   fetchedResources: Resource[];
 }
 
 const ResourceGrid = ({ fetchedResources }: Props) => {
+  const [visibleResources, setVisibleResources] = useState(21);
+
   const favorites = useFavoritesStore((state) => state.favorites);
-
-  const filter = usePreferencesStore((state) => state.filter);
   const viewMode = usePreferencesStore((state) => state.viewMode);
-
   const isFetching = useResourcesStore((state) => state.isFetching);
   const setResources = useResourcesStore((state) => state.setResources);
   const resources = useResourcesStore((state) => state.resources);
 
-  const query = useSearchStore((state) => state.query);
-  const selectedTag = useSearchStore((state) => state.selectedTag);
+  const [filter] = useQueryState("filter", {
+    defaultValue: "all",
+    history: "push",
+  });
+
+  const [query] = useQueryState("q", {
+    history: "push",
+  });
+  const [selectedTag] = useQueryState("tag", {
+    history: "push",
+  });
 
   useEffect(() => {
-    console.log("fetchedResources", fetchedResources);
     setResources(fetchedResources);
   }, [fetchedResources, setResources]);
+
+  useEffect(() => {
+    console.log(visibleResources);
+  }, [visibleResources]);
+
+  useEffect(() => {
+    setVisibleResources(21);
+  }, [filter, query, selectedTag]);
 
   const filterResources = () => {
     return resources.filter((resource) => {
@@ -46,6 +62,7 @@ const ResourceGrid = ({ fetchedResources }: Props) => {
 
       const matchesTag =
         selectedTag === "All" ||
+        selectedTag == null ||
         (selectedTag === "Favorites" &&
           favorites.some((favorite) => favorite.title === resource.title)) ||
         resource.tags.some((tag) => tag.text === selectedTag);
@@ -59,6 +76,11 @@ const ResourceGrid = ({ fetchedResources }: Props) => {
   };
 
   const filteredResources = filterResources();
+  const visibleFilteredResources = filteredResources.slice(0, visibleResources);
+
+  const loadMoreResources = () => {
+    setVisibleResources((prev) => prev + 21);
+  };
 
   return (
     <div className="w-full bg-background">
@@ -89,24 +111,35 @@ const ResourceGrid = ({ fetchedResources }: Props) => {
                 key={index}
               />
             ))
-          ) : filteredResources.length === 0 ? (
+          ) : visibleFilteredResources.length === 0 ? (
             <div className="col-span-full mt-12 flex h-full w-full flex-col items-center gap-y-1.5">
               <span className="text-pretty font-medium">
                 Oops! Looks like there’s nothing here.
               </span>
             </div>
           ) : (
-            filteredResources.map((resource, index) => (
+            visibleFilteredResources.map((resource, index) => (
               <React.Fragment key={index}>
                 <ResourceItem resource={resource} layout={viewMode} />
                 {viewMode === "list" &&
-                  index !== filteredResources.length - 1 && (
+                  index !== visibleFilteredResources.length - 1 && (
                     <Separator className="my-1.5" />
                   )}
               </React.Fragment>
             ))
           )}
         </div>
+
+        {visibleResources < filteredResources.length && (
+          <div className="mt-8 flex justify-center">
+            <Button
+              className="bg-[#3655B0] text-white"
+              onClick={loadMoreResources}
+            >
+              Load More
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

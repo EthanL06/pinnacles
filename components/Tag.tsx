@@ -15,7 +15,11 @@ const Tag = ({ variant = "outline", onClick, className, children }: Props) => {
     <Badge
       onClick={onClick}
       variant={variant}
-      className={cn("h-6 select-none", className)}
+      className={cn(
+        "h-6 select-none",
+        variant === "default" && "bg-[#3655B0]",
+        className,
+      )}
     >
       {children}
     </Badge>
