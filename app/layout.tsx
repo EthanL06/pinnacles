@@ -35,7 +35,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://pinnacles.app"),
-  title: "pinnacles — peak resources for web developers and designers",
+  title: "pinnacles. | Peak resources for web developers and designers",
   description:
     "A curated list of resources that are useful, high-quality, and up-to-date for web developers, UI/UX designers, and creative professionals.",
   keywords: [
@@ -89,14 +89,14 @@ export const metadata: Metadata = {
       "A curated list of resources that are useful, high-quality, and up-to-date for web developers, UI/UX designers, and creative professionals.",
     url: "https://pinnacles.app",
     siteName: "pinnacles.",
-    title: "pinnacles — peak resources for web developers and designers",
+    title: "pinnacles | Peak resources for web developers and designers",
     locale: "en_US",
     images: [
       {
         url: "https://pinnacles.app/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "pinnacles — peak resources for web developers and designers",
+        alt: "pinnacles. | Peak resources for web developers and designers",
       },
     ],
   },
@@ -104,15 +104,18 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@pinnacles_app",
     creator: "@pinnacles_app",
-    title: "pinnacles — peak resources for web developers and designers",
+    title: "pinnacles | peak resources for web developers and designers",
     description:
       "A curated list of resources that are useful, high-quality, and up-to-date for web developers, UI/UX designers, and creative professionals.",
     images: [
       {
         url: "https://pinnacles.app/opengraph-image.png",
-        alt: "pinnacles — peak resources for web developers and designers",
+        alt: "pinnacles. | Peak resources for web developers and designers",
       },
     ],
+  },
+  alternates: {
+    canonical: "https://pinnacles.app",
   },
 };
 

@@ -3,35 +3,21 @@
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/use-debounce";
 import { cn } from "@/lib/utils";
-import { useSearchStore } from "@/stores/useSearchStore";
 import { SearchIcon } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
+import { useQueryState } from "nuqs";
 
 const Search = () => {
-  const setQuery = useSearchStore((state) => state.setQuery);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, setQuery] = useQueryState("q", {
+    history: "push",
+  });
   const pathName = usePathname();
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    setQuery(searchParams.get("q") || "");
-  }, [searchParams, setQuery]);
-
   const handleQueryChange = useDebounce((query: string) => {
     setQuery(query);
-
-    const params = new URLSearchParams();
-    searchParams.forEach((value, key) => {
-      if (key !== "q") {
-        params.append(key, value);
-      }
-    });
-
-    if (query.trim() !== "") {
-      params.set("q", query);
-    }
-
-    window.history.pushState(null, "", `${pathName}?${params.toString()}`);
   }, 300);
 
   if (pathName !== "/" && pathName !== "/admin") {

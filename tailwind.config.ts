@@ -102,6 +102,7 @@ export default {
       nocompatible: true,
       preferredStrategy: "pseudoelements",
     }),
+    require("@tailwindcss/typography"),
     function ({
       addVariant,
     }: {

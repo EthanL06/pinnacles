@@ -18,7 +18,7 @@ import {
 } from "./ui/dialog";
 import { Badge } from "./ui/badge";
 import { iconMapping } from "./dropdowns/Filter";
-import { useSearchStore } from "@/stores/useSearchStore";
+import { useQueryState } from "nuqs";
 
 type Props = {
   resource: Resource;
@@ -28,7 +28,9 @@ type Props = {
 const MAX_DESCRIPTION_LENGTH = 140; // Adjust this value as needed
 
 const ResourceItem = ({ resource, layout = "grid" }: Props) => {
-  const selectedTag = useSearchStore((state) => state.selectedTag);
+  const [selectedTag] = useQueryState("tag", {
+    history: "push",
+  });
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -126,7 +128,16 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
                 <div className="flex flex-wrap gap-1.5">
                   {/* Tags */}
                   {tags &&
-                    tags.map((tag) => <Tag key={tag.id}>{tag.text}</Tag>)}
+                    tags.map((tag) => (
+                      <Tag
+                        variant={
+                          selectedTag === tag.text ? "default" : "outline"
+                        }
+                        key={tag.id}
+                      >
+                        {tag.text}
+                      </Tag>
+                    ))}
                 </div>
 
                 <div className="flex items-center justify-end gap-1 md:hidden">

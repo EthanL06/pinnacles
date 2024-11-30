@@ -2,7 +2,6 @@ import React from "react";
 import TagScroller from "./TagScroller";
 import ViewMode from "@/components/dropdowns/ViewMode";
 import Filter from "@/components/dropdowns/Filter";
-import RefreshButton from "@/components/buttons/RefreshButton";
 import ShuffleButton from "@/components/buttons/ShuffleButton";
 import SubmitResource from "@/components/SubmitResource";
 import { Button } from "@/components/ui/button";
@@ -24,7 +23,6 @@ const ResourceBar = ({ filteredResources, resources, isFetching }: Props) => {
           <ViewMode />
           <Filter />
           <ShuffleButton />
-          <RefreshButton />
         </div>
 
         <div className="flex w-full grow items-center justify-between text-sm sm:w-fit sm:text-base">
