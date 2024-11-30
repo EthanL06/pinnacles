@@ -47,5 +47,5 @@ If you have any feedback, [create an issue](https://github.com/EthanL06/pinnacle
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](LICENSE)
 
