@@ -1,5 +1,5 @@
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
