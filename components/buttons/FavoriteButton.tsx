@@ -8,12 +8,20 @@ import { Resource } from "@/types";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 
-const FavoriteButton = ({ resource }: { resource: Resource }) => {
+const FavoriteButton = ({
+  resource,
+  callback,
+}: {
+  resource: Resource;
+  callback?: () => void;
+}) => {
   const favorites = useFavoritesStore((state) => state.favorites);
   const addFavorite = useFavoritesStore((state) => state.addFavorite);
   const removeFavorite = useFavoritesStore((state) => state.removeFavorite);
 
-  const isFavorite = favorites.includes(resource);
+  const isFavorite = favorites.some(
+    (favorite) => favorite.title === resource.title,
+  );
 
   const handleFavorite = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -22,6 +30,9 @@ const FavoriteButton = ({ resource }: { resource: Resource }) => {
 
     if (isFavorite) {
       removeFavorite(resource);
+      if (callback) {
+        callback();
+      }
     } else {
       addFavorite(resource);
     }
@@ -30,6 +41,7 @@ const FavoriteButton = ({ resource }: { resource: Resource }) => {
   return (
     <ButtonPopover content={isFavorite ? "Favorited!" : "Favorite"}>
       <Button
+        aria-label={isFavorite ? "Unfavorite" : "Favorite"}
         className="relative"
         onClick={handleFavorite}
         variant={isFavorite ? "default" : "outline"}

@@ -26,7 +26,7 @@ const Hero = () => {
             </h1>
           </AnimatedGradientText>
 
-          <p className="paragraph mt-1 text-center">
+          <p className="paragraph mt-1 text-center font-semibold">
             <span
               style={{ "--shadow-color": "black" } as React.CSSProperties}
               className="relative inline-flex font-bold italic tracking-tighter text-primary underline after:absolute after:left-[0.04em] after:top-[0.04em] after:z-[-1] after:animate-line-shadow after:bg-[linear-gradient(45deg,transparent_45%,var(--shadow-color)_45%,var(--shadow-color)_55%,transparent_0)] after:bg-[length:0.06em_0.06em] after:bg-clip-text after:text-transparent after:content-[attr(data-text)]"

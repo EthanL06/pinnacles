@@ -9,6 +9,10 @@ export type Resource = {
   tags: TagType[];
 };
 
+export type ReviewingResource = Resource & {
+  id: string;
+};
+
 export const ResourceTypes = [
   "website",
   "article",

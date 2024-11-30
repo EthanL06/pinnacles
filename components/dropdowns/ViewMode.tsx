@@ -19,7 +19,7 @@ const ViewMode = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="pl-3 pr-2" variant="outline">
+        <Button aria-label="View Mode" className="pl-3 pr-2" variant="outline">
           {
             {
               grid: <LayoutGrid size={16} />,

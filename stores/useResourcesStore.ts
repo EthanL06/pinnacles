@@ -4,18 +4,29 @@ import { create } from "zustand";
 
 interface ResourceStore {
   resources: Resource[];
-  fetchResources: () => Promise<void>;
+  setResources: (resources: Resource[]) => void;
+  isFetching: boolean;
+  refreshResources: () => Promise<void>;
   addResource: (resource: Resource) => Promise<void>;
   shuffleResources: () => void;
 }
 
 export const useResourcesStore = create<ResourceStore>()((set) => ({
   resources: [],
-  fetchResources: async () => {
+  setResources: (resources) =>
+    set({
+      resources,
+    }),
+  isFetching: false,
+  refreshResources: async () => {
+    set({ isFetching: true });
+
     const resources = await fetchResources();
-    // Sort by alphabetical order of title
-    resources.sort((a, b) => a.title.localeCompare(b.title));
-    set({ resources });
+
+    set({
+      resources,
+      isFetching: false,
+    });
   },
   addResource: async (resource) => {
     // Optimistically update the UI
@@ -33,9 +44,7 @@ export const useResourcesStore = create<ResourceStore>()((set) => ({
   },
   shuffleResources: () => {
     set((state) => {
-      // Create a copy of the resources array
       const shuffledResources = [...state.resources];
-      // Shuffle the copied array
       for (let i = shuffledResources.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [shuffledResources[i], shuffledResources[j]] = [
@@ -43,7 +52,6 @@ export const useResourcesStore = create<ResourceStore>()((set) => ({
           shuffledResources[i],
         ];
       }
-      // Return the new state with the shuffled resources
       return { resources: shuffledResources };
     });
   },

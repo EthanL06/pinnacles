@@ -18,10 +18,10 @@ import {
   Youtube,
   CircleEllipsis,
 } from "lucide-react";
-import { usePreferencesStore } from "@/stores/usePreferencesStore";
 import { ResourceType, ResourceTypes } from "@/types/Resource";
+import { useQueryState, parseAsStringLiteral } from "nuqs";
 
-const iconMapping = {
+export const iconMapping = {
   all: <></>,
   website: <Globe size={16} />,
   article: <Newspaper size={16} />,
@@ -30,15 +30,26 @@ const iconMapping = {
   other: <CircleEllipsis size={16} />,
 } as Record<ResourceType | "all", JSX.Element>;
 
+type FilterTypes = (typeof ResourceTypes)[number] | "all";
+const filterTypes = ["all", ...ResourceTypes] as FilterTypes[];
+
 const Filter = () => {
-  const filter = usePreferencesStore((state) => state.filter);
-  const setFilter = usePreferencesStore((state) => state.setFilter);
+  const [filterParam, setFilterParam] = useQueryState(
+    "filter",
+    parseAsStringLiteral(filterTypes).withDefault("all").withOptions({
+      history: "push",
+    }),
+  );
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="pl-3 pr-2" variant="outline">
-          {filter === "all" ? <FilterIcon size={16} /> : iconMapping[filter]}
+        <Button aria-label="Filter" className="pl-3 pr-2" variant="outline">
+          {filterParam === "all" ? (
+            <FilterIcon size={16} />
+          ) : (
+            iconMapping[filterParam]
+          )}
           <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
@@ -48,16 +59,16 @@ const Filter = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup
-          value={filter}
+          value={filterParam}
           onValueChange={(value) => {
-            setFilter(value as ResourceType | "all");
+            setFilterParam(value as ResourceType | "all");
           }}
         >
           {["all", ...ResourceTypes].map((type) => (
             <DropdownMenuRadioItem
               key={type}
               className="flex justify-between capitalize"
-              value={type as ResourceType | "none"}
+              value={type as ResourceType | "all"}
             >
               {type}
               {iconMapping[type as ResourceType | "all"]}

@@ -20,6 +20,7 @@ const ShuffleButton = () => {
   return (
     <ButtonPopover content={isShuffled ? "Shuffled!" : "Shuffle"}>
       <Button
+        aria-label="Shuffle"
         className="relative"
         onClick={onShuffle}
         variant={isShuffled ? "default" : "outline"}

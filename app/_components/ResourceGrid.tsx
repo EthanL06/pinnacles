@@ -1,36 +1,52 @@
-import ShuffleButton from "@/components/buttons/ShuffleButton";
+"use client";
+
 import ResourceItem from "@/components/ResourceItem";
-import SubmitResource from "@/components/SubmitResource";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useFavoritesStore } from "@/stores/useFavoritesStore";
 import { useResourcesStore } from "@/stores/useResourcesStore";
-import { useSearchStore } from "@/stores/useSearchStore";
-import React, { useEffect } from "react";
-import TagScroller from "./TagScroller";
+import React, { useEffect, useState } from "react";
 import { usePreferencesStore } from "@/stores/usePreferencesStore";
-import ViewMode from "@/components/dropdowns/ViewMode";
-import Filter from "@/components/dropdowns/Filter";
+import { Skeleton } from "@/components/ui/skeleton";
+import ResourceBar from "./ResourceBar";
+import { Resource } from "@/types";
+import { useQueryState } from "nuqs";
+import { Button } from "@/components/ui/button";
 
-const ResourceGrid = () => {
-  const viewMode = usePreferencesStore((state) => state.viewMode);
-  const resources = useResourcesStore((state) => state.resources);
-  const fetchResources = useResourcesStore((state) => state.fetchResources);
-  const query = useSearchStore((state) => state.query);
-  const selectedTag = useSearchStore((state) => state.selectedTag);
+interface Props {
+  fetchedResources: Resource[];
+}
+
+const ResourceGrid = ({ fetchedResources }: Props) => {
+  const [visibleResources, setVisibleResources] = useState(21);
+
   const favorites = useFavoritesStore((state) => state.favorites);
-  const filter = usePreferencesStore((state) => state.filter);
+  const viewMode = usePreferencesStore((state) => state.viewMode);
+  const isFetching = useResourcesStore((state) => state.isFetching);
+  const setResources = useResourcesStore((state) => state.setResources);
+  const resources = useResourcesStore((state) => state.resources);
+
+  const [filter] = useQueryState("filter", {
+    defaultValue: "all",
+    history: "push",
+  });
+
+  const [query] = useQueryState("q", {
+    history: "push",
+  });
+  const [selectedTag] = useQueryState("tag", {
+    history: "push",
+  });
 
   useEffect(() => {
-    fetchResources();
-  }, [fetchResources]);
+    setResources(fetchedResources);
+  }, [fetchedResources, setResources]);
+
+  useEffect(() => {
+    setVisibleResources(21);
+  }, [filter, query, selectedTag]);
 
   const filterResources = () => {
-    if (selectedTag === "Favorites") {
-      return favorites;
-    }
-
     return resources.filter((resource) => {
       const matchesQuery = query
         ? resource.title.toLowerCase().includes(query.toLowerCase()) ||
@@ -42,6 +58,9 @@ const ResourceGrid = () => {
 
       const matchesTag =
         selectedTag === "All" ||
+        selectedTag == null ||
+        (selectedTag === "Favorites" &&
+          favorites.some((favorite) => favorite.title === resource.title)) ||
         resource.tags.some((tag) => tag.text === selectedTag);
 
       const matchesFilter =
@@ -53,62 +72,70 @@ const ResourceGrid = () => {
   };
 
   const filteredResources = filterResources();
+  const visibleFilteredResources = filteredResources.slice(0, visibleResources);
+
+  const loadMoreResources = () => {
+    setVisibleResources((prev) => prev + 21);
+  };
 
   return (
     <div className="w-full bg-background">
-      <div className="mx-auto min-h-screen w-full max-w-[1920px] grow border-b border-border bg-background px-3 pb-10 sm:px-6 md:px-12">
-        <TagScroller />
-        <div className="mb-4 flex flex-wrap justify-between gap-x-3 gap-y-1.5">
-          <div className="flex items-center gap-3">
-            <ViewMode />
-            <Filter />
-            <ShuffleButton />
-          </div>
+      <div className="mx-auto w-full max-w-[1920px] grow border-b border-border bg-background px-4 pb-10 sm:px-6 md:px-12">
+        <ResourceBar
+          filteredResources={filteredResources}
+          resources={resources}
+          isFetching={isFetching}
+        />
 
-          <div className="flex grow items-center justify-between">
-            <p>
-              {filteredResources.length < resources.length ? (
-                <>
-                  Showing{" "}
-                  <span className="font-semibold">
-                    {filteredResources.length}
-                  </span>{" "}
-                  of {resources.length} resources...
-                </>
-              ) : (
-                <>
-                  Showing{" "}
-                  <span className="font-semibold">
-                    {filteredResources.length}
-                  </span>{" "}
-                  resources...
-                </>
-              )}
-            </p>
-            <SubmitResource hasPopover={false}>
-              <Button className="text-inherit underline" variant={"link"}>
-                Suggest a resource?
-              </Button>
-            </SubmitResource>
-          </div>
-        </div>
         <div
           className={cn(
             "grid w-full bg-background",
             viewMode === "grid" &&
               "grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4",
             viewMode === "list" && "grid-cols-1",
+            (isFetching || filteredResources.length == 0) && "min-h-[75vh]",
           )}
         >
-          {filteredResources.map((resource, index) => (
-            <React.Fragment key={index}>
-              <ResourceItem resource={resource} layout={viewMode} />
-              {viewMode === "list" && index !== resources.length - 1 && (
-                <Separator className="my-1.5" />
-              )}
-            </React.Fragment>
-          ))}
+          {isFetching ? (
+            Array.from({ length: 12 }).map((_, index) => (
+              <Skeleton
+                className={cn(
+                  "size-full rounded-3xl",
+                  viewMode === "grid" && "h-[22.5rem]",
+                  viewMode === "list" && "mb-4 h-32",
+                )}
+                key={index}
+              />
+            ))
+          ) : visibleFilteredResources.length === 0 ? (
+            <div className="col-span-full mt-12 flex h-full w-full flex-col items-center gap-y-1.5">
+              <span className="text-pretty font-medium">
+                Oops! Looks like there’s nothing here.
+              </span>
+            </div>
+          ) : (
+            visibleFilteredResources.map((resource, index) => (
+              <React.Fragment key={index}>
+                <ResourceItem resource={resource} layout={viewMode} />
+                {viewMode === "list" &&
+                  index !== visibleFilteredResources.length - 1 && (
+                    <Separator className="my-1.5" />
+                  )}
+              </React.Fragment>
+            ))
+          )}
         </div>
+
+        {visibleResources < filteredResources.length && (
+          <div className="mt-8 flex justify-center">
+            <Button
+              className="bg-[#3655B0] text-white"
+              onClick={loadMoreResources}
+            >
+              Load More
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

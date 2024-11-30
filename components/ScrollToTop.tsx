@@ -10,7 +10,15 @@ const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   const handleScroll = () => {
-    setIsVisible(window.scrollY > 100);
+    if (window.scrollY > 100) {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+    } else {
+      setIsVisible(false);
+    }
   };
 
   const scrollToTop = () => {
@@ -49,16 +57,16 @@ const ScrollToTop = () => {
             stiffness: 400,
             damping: 20,
           }}
-          className="fixed bottom-16 right-16 z-50"
+          className="fixed bottom-8 right-8 z-50 sm:bottom-12 sm:right-12"
         >
           <ButtonPopover content="Scroll to Top">
             <Button
               variant={"outline"}
               size={"icon"}
-              className="size-12 rounded-full shadow-xl"
+              className="size-14 rounded-full shadow-xl"
               onClick={scrollToTop}
             >
-              <ChevronUp strokeWidth={"2"} />
+              <ChevronUp className="scale-[1.5]" strokeWidth={"2"} />
             </Button>
           </ButtonPopover>
         </motion.div>
