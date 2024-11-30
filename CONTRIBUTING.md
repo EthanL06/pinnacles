@@ -61,7 +61,7 @@ cd pinnacles
    ### OpenAI API (optional)
    > _Note: The OpenAI API setup is optional. If you choose not to set it up, the only feature that will not function properly is the automatic tag generation when submitting a resource._
    - Go to your [OpenAI account settings](https://platform.openai.com/settings/) and copy your API key.
-   - In the project directory, create a .env file and add the following (replace your-api-key-here with your actual OpenAI API key):
+   - In the project directory, create a `.env` file and add the following (replace your-api-key-here with your actual OpenAI API key):
 
      ```dotenv
      OPENAI_API_KEY=your-api-key-here
