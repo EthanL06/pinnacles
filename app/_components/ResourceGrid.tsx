@@ -43,10 +43,6 @@ const ResourceGrid = ({ fetchedResources }: Props) => {
   }, [fetchedResources, setResources]);
 
   useEffect(() => {
-    console.log(visibleResources);
-  }, [visibleResources]);
-
-  useEffect(() => {
     setVisibleResources(21);
   }, [filter, query, selectedTag]);
 

@@ -57,8 +57,7 @@ export const fetchReviewingResources = async () => {
 
 export const addResource = async (resource: Resource) => {
   try {
-    const docRef = await addDoc(collection(db, "resources"), resource);
-    console.log("Document written with ID: ", docRef.id);
+    await addDoc(collection(db, "resources"), resource);
   } catch (e) {
     console.error("Error adding document: ", e);
   }
@@ -66,11 +65,8 @@ export const addResource = async (resource: Resource) => {
 
 export const fetchResources = async () => {
   try {
-    console.log("Fetching resources");
     const q = query(collection(db, "resources"), orderBy("title"));
     const querySnapshot = await getDocs(q);
-
-    console.log("I AM FETCHING WTFFF");
     return querySnapshot.docs.map((doc) => doc.data() as Resource);
   } catch (e) {
     console.error("Error fetching documents: ", e);

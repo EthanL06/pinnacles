@@ -383,10 +383,6 @@ const SubmitResourceForm = ({
                 if (form.formState.isValid) {
                   form.handleSubmit(onSubmit)();
                 } else {
-                  console.log(
-                    "Form is invalid. Errors:",
-                    form.formState.errors,
-                  );
                   setPreview(false);
                 }
               }}
