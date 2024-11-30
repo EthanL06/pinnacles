@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { ResourceType, ResourceTypes } from "@/types/Resource";
 import { useQueryState, parseAsStringLiteral } from "nuqs";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
 export const iconMapping = {
   all: <></>,
@@ -62,6 +64,12 @@ const Filter = () => {
           value={filterParam}
           onValueChange={(value) => {
             setFilterParam(value as ResourceType | "all");
+
+            if (analytics) {
+              logEvent(analytics, "filter", {
+                filter: value,
+              });
+            }
           }}
         >
           {["all", ...ResourceTypes].map((type) => (

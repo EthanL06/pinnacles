@@ -18,7 +18,7 @@ const Hero = () => {
           "-z-10 opacity-70 [mask-image:radial-gradient(1000px_circle_at_center,transparent,white)]",
         )}
       />
-      <div className="relative h-full w-full overflow-clip bg-gradient-to-b from-transparent from-85% to-blue-300/15 pt-32">
+      <div className="relative h-full w-full overflow-clip bg-gradient-to-b from-transparent from-85% to-blue-300/15 px-4 pt-32">
         <div>
           <AnimatedGradientText className="relative" hideBorder={true}>
             <h1 className="heading animate-gradient bg-transparent bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-center font-serif text-transparent">
@@ -26,7 +26,7 @@ const Hero = () => {
             </h1>
           </AnimatedGradientText>
 
-          <p className="paragraph mt-1 text-center font-semibold">
+          <p className="paragraph mt-1 text-balance text-center font-semibold">
             <span
               style={{ "--shadow-color": "black" } as React.CSSProperties}
               className="relative inline-flex font-bold italic tracking-tighter text-primary underline after:absolute after:left-[0.04em] after:top-[0.04em] after:z-[-1] after:animate-line-shadow after:bg-[linear-gradient(45deg,transparent_45%,var(--shadow-color)_45%,var(--shadow-color)_55%,transparent_0)] after:bg-[length:0.06em_0.06em] after:bg-clip-text after:text-transparent after:content-[attr(data-text)]"

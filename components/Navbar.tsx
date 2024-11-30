@@ -11,6 +11,8 @@ import ThemeButton from "./buttons/ThemeButton";
 import Logo from "./Logo";
 import CoffeeButton from "./buttons/CoffeeButton";
 import { AnimatePresence, motion } from "framer-motion";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
 const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -40,6 +42,13 @@ const Navbar = () => {
         <div className="hidden grow basis-0 justify-end gap-2 sm:flex">
           <ButtonPopover content={"About"}>
             <Link
+              onClick={() => {
+                if (analytics) {
+                  logEvent(analytics, "select_content", {
+                    content_type: "about",
+                  });
+                }
+              }}
               aria-label="About"
               className={buttonVariants({
                 variant: "outline",
@@ -50,7 +59,15 @@ const Navbar = () => {
               <InfoIcon />
             </Link>
           </ButtonPopover>
-          <SubmitResource>
+          <SubmitResource
+            onClick={() => {
+              if (analytics) {
+                logEvent(analytics, "select_content", {
+                  content_type: "submit_resource",
+                });
+              }
+            }}
+          >
             <Button
               aria-label="Submit Resource"
               size={"icon"}
@@ -88,6 +105,13 @@ const Navbar = () => {
               <motion.div variants={variants}>
                 <ButtonPopover content={"About"}>
                   <Link
+                    onClick={() => {
+                      if (analytics) {
+                        logEvent(analytics, "select_content", {
+                          content_type: "about",
+                        });
+                      }
+                    }}
                     className={buttonVariants({
                       variant: "outline",
                       size: "icon",
@@ -98,8 +122,16 @@ const Navbar = () => {
                   </Link>
                 </ButtonPopover>
               </motion.div>
-              <motion.div className="xs:block hidden" variants={variants}>
-                <SubmitResource>
+              <motion.div className="hidden xs:block" variants={variants}>
+                <SubmitResource
+                  onClick={() => {
+                    if (analytics) {
+                      logEvent(analytics, "select_content", {
+                        content_type: "submit_resource",
+                      });
+                    }
+                  }}
+                >
                   <Button size={"icon"} variant={"outline"}>
                     <FilePlus />
                   </Button>

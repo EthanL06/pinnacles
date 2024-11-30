@@ -6,6 +6,8 @@ import { Button } from "../ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
 const ThemeButton = () => {
   const { setTheme, resolvedTheme: theme } = useTheme();
@@ -15,6 +17,11 @@ const ThemeButton = () => {
 
   const handleClick = () => {
     setTheme(isDarkMode ? "light" : "dark");
+    if (analytics) {
+      logEvent(analytics, "theme", {
+        theme: isDarkMode ? "light" : "dark",
+      });
+    }
   };
 
   const transition = {

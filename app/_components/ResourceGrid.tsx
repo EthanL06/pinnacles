@@ -116,7 +116,11 @@ const ResourceGrid = ({ fetchedResources }: Props) => {
           ) : (
             visibleFilteredResources.map((resource, index) => (
               <React.Fragment key={index}>
-                <ResourceItem resource={resource} layout={viewMode} />
+                <ResourceItem
+                  resource={resource}
+                  index={index}
+                  layout={viewMode}
+                />
                 {viewMode === "list" &&
                   index !== visibleFilteredResources.length - 1 && (
                     <Separator className="my-1.5" />

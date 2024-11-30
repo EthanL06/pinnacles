@@ -6,8 +6,10 @@ import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import useTimeout from "@/hooks/use-timeout";
 import ButtonPopover from "./ButtonPopover";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
-const CopyButton = ({ link }: { link: string }) => {
+const CopyButton = ({ title, link }: { title: string; link: string }) => {
   const [copied, setCopied] = useState(false);
   const { start } = useTimeout(() => setCopied(false), 1500);
 
@@ -16,6 +18,13 @@ const CopyButton = ({ link }: { link: string }) => {
     navigator.clipboard.writeText(link);
     setCopied(true);
     start();
+
+    if (analytics) {
+      logEvent(analytics, "resource_copy", {
+        title,
+        url: link,
+      });
+    }
   };
 
   return (

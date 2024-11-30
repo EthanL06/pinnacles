@@ -19,15 +19,18 @@ import {
 import { Badge } from "./ui/badge";
 import { iconMapping } from "./dropdowns/Filter";
 import { useQueryState } from "nuqs";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
 type Props = {
   resource: Resource;
+  index?: number;
   layout?: "grid" | "list";
 };
 
 const MAX_DESCRIPTION_LENGTH = 140; // Adjust this value as needed
 
-const ResourceItem = ({ resource, layout = "grid" }: Props) => {
+const ResourceItem = ({ resource, index = 13, layout = "grid" }: Props) => {
   const [selectedTag] = useQueryState("tag", {
     history: "push",
   });
@@ -57,6 +60,16 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div
+          onClick={() => {
+            if (analytics) {
+              logEvent(analytics, "resource_clicked", {
+                title: resource.title,
+                tags: tags.map((tag) => tag.text),
+                selectedTag: selectedTag || "All",
+                type: resource.type,
+              });
+            }
+          }}
           role="button"
           className={cn(
             "group flex scale-100 rounded-3xl p-6 transition-all duration-300 ease-in-out last:mb-12 hover:cursor-pointer",
@@ -77,8 +90,13 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              loading="lazy"
-              rel="preload"
+              rel={
+                index < 12 ? "preload" : "prefetch" // Preload the first 12 resources
+              }
+              loading={
+                index < 12 ? "eager" : "lazy" // Eagerly load the first 12 resources
+              }
+              fetchPriority={index < 12 ? "high" : "low"}
               src={resource.image || "/images/placeholder.png"}
               alt={resource.title}
               className={cn(
@@ -151,13 +169,24 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
                         variant: "outline",
                         size: "icon",
                       })}
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+
+                        if (analytics) {
+                          logEvent(analytics, "resource_opened", {
+                            title: resource.title,
+                            tags: tags.map((tag) => tag.text),
+                            selectedTag: selectedTag || "All",
+                            type: resource.type,
+                          });
+                        }
+                      }}
                     >
                       <ExternalLink />
                     </Link>
                   </ButtonPopover>
 
-                  <CopyButton link={resource.url} />
+                  <CopyButton title={resource.title} link={resource.url} />
 
                   <FavoriteButton resource={resource} />
                 </div>
@@ -185,13 +214,24 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
                     variant: "outline",
                     size: "icon",
                   })}
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    if (analytics) {
+                      logEvent(analytics, "resource_opened", {
+                        title: resource.title,
+                        tags: tags.map((tag) => tag.text),
+                        selectedTag: selectedTag || "All",
+                        type: resource.type,
+                      });
+                    }
+                  }}
                 >
                   <ExternalLink />
                 </Link>
               </ButtonPopover>
 
-              <CopyButton link={resource.url} />
+              <CopyButton title={resource.title} link={resource.url} />
 
               <FavoriteButton resource={resource} />
             </div>
@@ -224,6 +264,8 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
         <div className="aspect-video max-h-[24rem] w-full">
           <Link target="_blank" href={resource.url}>
             <img
+              loading="lazy"
+              rel="prefetch"
               src={resource.image || "/images/placeholder.png"}
               alt={resource.title}
               className="size-full rounded-xl object-cover outline outline-1 outline-border"
@@ -242,13 +284,23 @@ const ResourceItem = ({ resource, layout = "grid" }: Props) => {
                 }
               }}
             />
-            <CopyButton link={resource.url} />
+            <CopyButton title={resource.title} link={resource.url} />
           </div>
           <div className="flex items-center justify-end gap-1.5">
             <DialogClose asChild>
               <Button variant={"outline"}>Close</Button>
             </DialogClose>
             <Link
+              onClick={() => {
+                if (analytics) {
+                  logEvent(analytics, "resource_opened", {
+                    title: resource.title,
+                    tags: tags.map((tag) => tag.text),
+                    selectedTag: selectedTag || "All",
+                    type: resource.type,
+                  });
+                }
+              }}
               aria-label="Open Link"
               target="_blank"
               rel="noopener noreferrer"

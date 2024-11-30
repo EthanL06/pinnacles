@@ -7,6 +7,8 @@ import { Resource } from "@/types";
 
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
 const FavoriteButton = ({
   resource,
@@ -35,6 +37,14 @@ const FavoriteButton = ({
       }
     } else {
       addFavorite(resource);
+    }
+
+    if (analytics) {
+      logEvent(analytics, "resource_favorite", {
+        title: resource.title,
+        url: resource.url,
+        favorite: !isFavorite,
+      });
     }
   };
 

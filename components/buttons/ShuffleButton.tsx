@@ -5,6 +5,8 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import ButtonPopover from "./ButtonPopover";
 import { AnimatePresence, motion } from "framer-motion";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
 const ShuffleButton = () => {
   const shuffleResources = useResourcesStore((state) => state.shuffleResources);
@@ -15,6 +17,12 @@ const ShuffleButton = () => {
     setIsShuffled(true);
     shuffleResources();
     start();
+
+    if (analytics) {
+      logEvent(analytics, "shuffle", {
+        shuffle: true,
+      });
+    }
   };
 
   return (

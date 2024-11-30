@@ -1,7 +1,9 @@
 import Tag from "@/components/Tag";
 import { Skeleton } from "@/components/ui/skeleton";
+import { analytics } from "@/firebase/firebase";
 import { useResourcesStore } from "@/stores/useResourcesStore";
 import type { Tag as TagType } from "emblor";
+import { logEvent } from "firebase/analytics";
 import { useQueryState } from "nuqs";
 
 export default function TagScroller() {
@@ -60,10 +62,13 @@ export default function TagScroller() {
               className="cursor-pointer"
               variant={selectedTag === tag.text ? "default" : "outline"}
               onClick={() => {
-                if (selectedTag === tag.text) {
-                  setSelectedTag("All");
-                } else {
-                  setSelectedTag(tag.text);
+                const newTag = selectedTag === tag.text ? "All" : tag.text;
+                setSelectedTag(newTag);
+
+                if (analytics) {
+                  logEvent(analytics, "tag_select", {
+                    tag: newTag,
+                  });
                 }
               }}
               key={tag.id}
