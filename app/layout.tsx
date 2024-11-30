@@ -14,6 +14,7 @@ const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
   display: "swap",
   adjustFontFallback: false,
+  preload: true,
 });
 
 const fraunces = Fraunces({
@@ -22,6 +23,7 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
   display: "swap",
   adjustFontFallback: false,
+  preload: true,
 });
 
 export const viewport: Viewport = {
@@ -35,7 +37,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://pinnacles.app"),
-  title: "pinnacles. | Peak resources for web developers and designers",
+  title: "pinnacles. | Peak Resources for Web Developers and Designers",
   description:
     "A curated list of useful, high-quality, and up-to-date resources for web developers, UI/UX designers, and creative professionals.",
   keywords: [
@@ -89,14 +91,14 @@ export const metadata: Metadata = {
       "A curated list of useful, high-quality, and up-to-date resources for web developers, UI/UX designers, and creative professionals.",
     url: "https://pinnacles.app",
     siteName: "pinnacles.",
-    title: "pinnacles. | Peak resources for web developers and designers",
+    title: "pinnacles. | Peak Resources for Web Developers and Designers",
     locale: "en_US",
     images: [
       {
         url: "https://pinnacles.app/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "pinnacles. | Peak resources for web developers and designers",
+        alt: "pinnacles. | Peak Resources for Web Developers and Designers",
       },
     ],
   },
@@ -104,13 +106,13 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@pinnacles_app",
     creator: "@pinnacles_app",
-    title: "pinnacles. | peak resources for web developers and designers",
+    title: "pinnacles. | Peak Resources for Web Developers and Designers",
     description:
       "A curated list of useful, high-quality, and up-to-date resources for web developers, UI/UX designers, and creative professionals.",
     images: [
       {
         url: "https://pinnacles.app/opengraph-image.png",
-        alt: "pinnacles. | Peak resources for web developers and designers",
+        alt: "pinnacles. | Peak Resources for Web Developers and Designers",
       },
     ],
   },

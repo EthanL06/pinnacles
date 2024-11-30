@@ -2,11 +2,21 @@ import React from "react";
 import ButtonPopover from "./ButtonPopover";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
 const CoffeeButton = () => {
   return (
     <ButtonPopover content={"support me! 🫠"}>
       <Link
+        onClick={() => {
+          if (analytics) {
+            logEvent(analytics, "select_content", {
+              content_type: "support",
+              content_id: "buymeacoffee",
+            });
+          }
+        }}
         aria-label="Support Me"
         target="_blank"
         href="https://www.buymeacoffee.com/ethanlanting"

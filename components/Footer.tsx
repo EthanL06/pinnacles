@@ -5,6 +5,8 @@ import Logo from "./Logo";
 import Particles from "./ui/particles";
 import GridPattern from "./ui/grid-pattern";
 import { cn } from "@/lib/utils";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
 const Footer = () => {
   return (
@@ -30,6 +32,14 @@ const Footer = () => {
       </div>
       <div className="flex flex-wrap-reverse items-center gap-y-1 whitespace-nowrap text-sm">
         <Link
+          onClick={() => {
+            if (analytics) {
+              logEvent(analytics, "select_content", {
+                content_type: "support",
+                content_id: "buymeacoffee",
+              });
+            }
+          }}
           className="hover:underline dark:text-muted-foreground dark:hover:text-white sm:text-base"
           target="_blank"
           href="https://www.buymeacoffee.com/ethanlanting"
@@ -40,6 +50,13 @@ const Footer = () => {
         <span className="mx-2">•</span>
 
         <Link
+          onClick={() => {
+            if (analytics) {
+              logEvent(analytics, "select_content", {
+                content_type: "source_code",
+              });
+            }
+          }}
           className="hover:underline dark:text-muted-foreground dark:hover:text-white sm:text-base"
           target="_blank"
           href="https://github.com/EthanL06/pinnacles"
@@ -50,6 +67,13 @@ const Footer = () => {
         <span className="mx-2">•</span>
 
         <Link
+          onClick={() => {
+            if (analytics) {
+              logEvent(analytics, "select_content", {
+                content_type: "privacy_policy",
+              });
+            }
+          }}
           className="hover:underline dark:text-muted-foreground dark:hover:text-white sm:text-base"
           href="/privacy-policy"
         >

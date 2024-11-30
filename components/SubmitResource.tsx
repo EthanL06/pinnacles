@@ -12,11 +12,14 @@ import {
 
 import SubmitResourceForm from "./SubmitResourceForm";
 import ButtonPopover from "./buttons/ButtonPopover";
+import Link from "next/link";
 
 const SubmitResource = ({
+  onClick,
   hasPopover = true,
   children,
 }: {
+  onClick?: () => void;
   hasPopover?: boolean;
   children: React.ReactNode;
 }) => {
@@ -41,7 +44,7 @@ const SubmitResource = ({
       }}
       open={isOpen}
     >
-      <DialogTrigger asChild>
+      <DialogTrigger onClick={onClick} asChild>
         {hasPopover ? (
           <ButtonPopover content="Suggest Resource">
             {triggerContent}
@@ -73,12 +76,25 @@ const SubmitResource = ({
       >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-x-1 text-2xl">
-            {preview ? "Preview Resource" : "Suggest a Resource"}
+            {preview ? "Preview Resource" : "Have a Resource to Share?"}
           </DialogTitle>
           <DialogDescription>
-            {preview
-              ? "View how the resource will appear on the site."
-              : "Have a great resource to share? Submit the link below, and we'll review it before adding it to the platform."}
+            {preview ? (
+              "View how the resource will appear on the site."
+            ) : (
+              <>
+                Submit the link below, and we&apos;ll review it before adding it
+                to the platform. Please read the{" "}
+                <Link
+                  className="text-primary underline"
+                  target="_blank"
+                  href="https://github.com/EthanL06/pinnacles/blob/master/CONTRIBUTING.md#suggest-a-resource"
+                >
+                  contribution guidelines
+                </Link>{" "}
+                before submitting.
+              </>
+            )}
           </DialogDescription>
         </DialogHeader>
         <SubmitResourceForm

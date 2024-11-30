@@ -7,6 +7,8 @@ import { SearchIcon } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 import { useQueryState } from "nuqs";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "@/firebase/firebase";
 
 const Search = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -18,7 +20,13 @@ const Search = () => {
 
   const handleQueryChange = useDebounce((query: string) => {
     setQuery(query);
-  }, 300);
+
+    if (analytics && query) {
+      logEvent(analytics, "search", {
+        search_term: query,
+      });
+    }
+  }, 700);
 
   if (pathName !== "/" && pathName !== "/admin") {
     return null;

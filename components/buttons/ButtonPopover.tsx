@@ -9,9 +9,11 @@ const DELAY = 200;
 const ButtonPopover = ({
   content,
   children,
+  onClick,
 }: {
   content: string;
   children: React.ReactNode;
+  onClick?: () => void;
 }) => {
   const [showPopover, setShowPopover] = useState(false);
   const { start, stop, active } = useTimeout(() => setShowPopover(true), DELAY);
@@ -26,6 +28,7 @@ const ButtonPopover = ({
   return (
     <Popover open={showPopover}>
       <PopoverTrigger
+        onClick={onClick}
         onMouseEnter={start}
         onMouseLeave={handleMouseLeave}
         asChild

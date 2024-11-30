@@ -11,6 +11,8 @@ import {
 } from "../ui/dropdown-menu";
 import { ChevronDown, LayoutGrid, LayoutList } from "lucide-react";
 import { Button } from "../ui/button";
+import { analytics } from "@/firebase/firebase";
+import { logEvent } from "firebase/analytics";
 
 const ViewMode = () => {
   const setViewMode = usePreferencesStore((state) => state.setViewMode);
@@ -37,6 +39,11 @@ const ViewMode = () => {
           value={viewMode}
           onValueChange={(value) => {
             setViewMode(value as "grid" | "list");
+            if (analytics) {
+              logEvent(analytics, "view_mode", {
+                view_mode: value,
+              });
+            }
           }}
         >
           <DropdownMenuRadioItem className="flex justify-between" value="grid">
