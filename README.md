@@ -4,7 +4,7 @@
 <img width="1080" src="https://github.com/user-attachments/assets/0bdc7bdc-cf9a-4dba-ba66-d69ee76c2e9d" />
 </p>
 
-A collection of peak resources for web developers and designers. We aim to provide a curated list of resources that are useful, high-quality, and up-to-date. 
+A collection of over 100+ peak resources for web developers and designers. We aim to provide a curated list of resources that are useful, high-quality, and up-to-date. 
 
 I created this site to solve the frustration of finding great resources but struggling to keep track of them. Over the years, I’ve collected hundreds and wanted a simple way to organize and share them.
 
