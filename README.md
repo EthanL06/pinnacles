@@ -30,7 +30,7 @@ I created this site to solve the frustration of finding great resources but stru
 
 Contributions are always welcome!
 
-See `CONTRIBUTING.md` for ways to get started.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to get started.
 
 
 ## Tech Stack
