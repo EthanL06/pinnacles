@@ -6,7 +6,7 @@ import { fetchResources } from "@/firebase/database";
 import { unstable_cache } from "next/cache";
 
 const getCachedResources = unstable_cache(fetchResources, ["resources"], {
-  revalidate: 1000 * 60 * 60,
+  revalidate: 60 * 60, // 1 hour
   tags: ["resources"],
 });
 

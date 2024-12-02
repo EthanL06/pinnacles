@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { isSignedIn, signIn } from "@/firebase/auth";
 import { RefreshCcw } from "lucide-react";
+import RefreshButton from "@/components/buttons/RefreshButton";
 
 const ReviewGrid = () => {
   const [isReviewMode, setIsReviewMode] = useState(false);
@@ -118,6 +119,7 @@ const ReviewGrid = () => {
         <div className="mx-auto w-full max-w-[1920px] grow border-b border-border bg-background px-3 pb-10 sm:px-6 md:px-12">
           <div className="mb-4 flex items-center gap-x-4">
             <ViewMode />
+            <RefreshButton />
             <div className="flex items-center gap-x-2">
               <Label>Review Mode</Label>
               <Switch
