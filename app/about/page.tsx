@@ -57,12 +57,6 @@ const Page = () => {
           </p>
 
           <p>
-            Please note: I am not affiliated with or sponsored by any of the
-            resources featured on this site—this is 100% my own project, created
-            to share what I’ve personally found helpful.
-          </p>
-
-          <p>
             Feel free to{" "}
             <SubmitResource hasPopover={false}>
               <span className="text-primary underline hover:cursor-pointer">
@@ -87,6 +81,12 @@ const Page = () => {
               supporting me
             </Link>{" "}
             or spreading the word. Thanks for stopping by!
+          </p>
+
+          <p className="relative text-xl italic text-gray-500 sm:text-2xl">
+            Please note: I am not affiliated with or sponsored by any of the
+            resources featured on this site—this is 100% my own project, created
+            to share what I’ve personally found helpful.
           </p>
 
           <div className="flex flex-col gap-y-2 pt-10">

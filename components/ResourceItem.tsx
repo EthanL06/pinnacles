@@ -159,6 +159,10 @@ const ResourceItem = ({ resource, index = 13, layout = "grid" }: Props) => {
                 </div>
 
                 <div className="flex items-center justify-end gap-1 md:hidden">
+                  <CopyButton title={resource.title} link={resource.url} />
+
+                  <FavoriteButton resource={resource} />
+
                   <ButtonPopover content="Open Link">
                     <Link
                       aria-label="Open Link"
@@ -185,10 +189,6 @@ const ResourceItem = ({ resource, index = 13, layout = "grid" }: Props) => {
                       <ExternalLink />
                     </Link>
                   </ButtonPopover>
-
-                  <CopyButton title={resource.title} link={resource.url} />
-
-                  <FavoriteButton resource={resource} />
                 </div>
               </div>
             )}
@@ -204,6 +204,10 @@ const ResourceItem = ({ resource, index = 13, layout = "grid" }: Props) => {
             )}
           >
             <div className="flex items-center gap-1">
+              <CopyButton title={resource.title} link={resource.url} />
+
+              <FavoriteButton resource={resource} />
+
               <ButtonPopover content="Open Link">
                 <Link
                   aria-label="Open Link"
@@ -230,10 +234,6 @@ const ResourceItem = ({ resource, index = 13, layout = "grid" }: Props) => {
                   <ExternalLink />
                 </Link>
               </ButtonPopover>
-
-              <CopyButton title={resource.title} link={resource.url} />
-
-              <FavoriteButton resource={resource} />
             </div>
             {layout === "grid" && (
               <div className="flex flex-wrap items-end gap-1.5">

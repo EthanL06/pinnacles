@@ -37,9 +37,9 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://pinnacles.app"),
-  title: "pinnacles. | Peak Resources for Web Developers and Designers",
+  title: "pinnacles | peak resources for web developers and designers.",
   description:
-    "A curated list of useful, high-quality, and up-to-date resources for web developers, UI/UX designers, and creative professionals.",
+    "A curated collection of over 100+ useful, high-quality, peak resources for web developers and designers.",
   keywords: [
     "web dev",
     "web development",
