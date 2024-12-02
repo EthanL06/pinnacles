@@ -1,19 +1,18 @@
-import { useResourcesStore } from "@/stores/useResourcesStore";
 import React, { useState } from "react";
 import ButtonPopover from "./ButtonPopover";
 import { Button } from "../ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { RefreshCcw } from "lucide-react";
 import useTimeout from "@/hooks/use-timeout";
+import { revalidateCache } from "@/actions/revalidateCache";
 
 const RefreshButton = () => {
-  const refreshResources = useResourcesStore((state) => state.refreshResources);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { start } = useTimeout(() => setIsRefreshing(false), 1500);
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setIsRefreshing(true);
-    refreshResources();
+    await revalidateCache();
     start();
   };
 

@@ -19,7 +19,12 @@ const Search = () => {
   const searchParams = useSearchParams();
 
   const handleQueryChange = useDebounce((query: string) => {
-    setQuery(query);
+    if (query.trim() === "") {
+      setQuery(null);
+      return;
+    }
+
+    setQuery(query.trim());
 
     if (analytics && query) {
       logEvent(analytics, "search", {
