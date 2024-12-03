@@ -1,4 +1,4 @@
-# ⏫ pinnacles. | Peak Resources for Web Developers and Designers
+# [⏫ pinnacles. | Peak Resources for Web Developers and Designers](https://pinnacles.app)
 
 <p align="center">
 <img width="1080" src="https://github.com/user-attachments/assets/0bdc7bdc-cf9a-4dba-ba66-d69ee76c2e9d" />
